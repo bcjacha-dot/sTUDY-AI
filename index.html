@@ -1,757 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StudyAI – Learn Smarter</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://www.paypal.com/sdk/js?client-id=NZ43STGXW99DN&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
-<style>
-:root{
-  --bg:#faf8f4;--bg2:#f2efe8;--surface:#ffffff;--border:#e2ddd4;
-  --ink:#1a1714;--ink2:#5a5549;--ink3:#9a9186;
-  --gold:#c8a84b;--gold2:#e8c96a;--goldbg:#fdf6e3;
-  --green:#2d6a4f;--greenbg:#e8f5ee;
-  --blue:#1d4e89;--bluebg:#e8f0fb;
-  --red:#c0392b;
-  --r:12px;--r2:20px;
-  --ff-display:'Fraunces',serif;
-  --ff-body:'Instrument Sans',sans-serif;
-  --shadow:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.07);
-  --shadow-lg:0 8px 32px rgba(0,0,0,.12);
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html{font-size:16px;scroll-behavior:smooth}
-body{background:var(--bg);color:var(--ink);font-family:var(--ff-body);line-height:1.6;min-height:100vh}
-.page{display:none;min-height:100vh}
-.page.active{display:block}
-nav{
-  position:sticky;top:0;z-index:100;
-  background:rgba(250,248,244,.92);backdrop-filter:blur(12px);
-  border-bottom:1px solid var(--border);
-  padding:0 2rem;height:60px;
-  display:flex;align-items:center;justify-content:space-between;
-}
-.nav-logo{font-family:var(--ff-display);font-size:20px;font-weight:900;color:var(--ink);cursor:pointer;font-style:italic}
-.nav-logo em{color:var(--gold);font-style:normal}
-.nav-right{display:flex;align-items:center;gap:12px}
-.nav-plan-badge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;letter-spacing:.04em;text-transform:uppercase}
-.badge-free{background:var(--bg2);color:var(--ink2)}
-.badge-basic{background:var(--bluebg);color:var(--blue)}
-.badge-pro{background:var(--goldbg);color:var(--gold)}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:var(--r);border:1.5px solid var(--border);background:var(--surface);color:var(--ink);font-family:var(--ff-body);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;text-decoration:none}
-.btn:hover{background:var(--bg2);border-color:#ccc}
-.btn-primary{background:var(--ink);color:#fff;border-color:var(--ink)}
-.btn-primary:hover{background:#2d2926;border-color:#2d2926}
-.btn-gold{background:var(--gold);color:#fff;border-color:var(--gold)}
-.btn-gold:hover{background:#b8963c;border-color:#b8963c}
-.btn-sm{padding:6px 14px;font-size:12px}
-.btn-lg{padding:13px 28px;font-size:15px;font-weight:600}
-.hero{
-  max-width:780px;margin:0 auto;padding:5rem 2rem 4rem;text-align:center;
-}
-.hero-eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:1rem}
-.hero h1{font-family:var(--ff-display);font-size:clamp(2.4rem,6vw,4rem);font-weight:900;line-height:1.08;margin-bottom:1.25rem;font-style:italic}
-.hero h1 span{color:var(--gold)}
-.hero p{font-size:17px;color:var(--ink2);max-width:520px;margin:0 auto 2.5rem;line-height:1.7}
-.hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.features{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:2.5rem 2rem}
-.features-grid{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem}
-.feat{display:flex;align-items:flex-start;gap:12px}
-.feat-icon{font-size:22px;flex-shrink:0;margin-top:2px}
-.feat-text h3{font-size:14px;font-weight:600;margin-bottom:4px}
-.feat-text p{font-size:13px;color:var(--ink2);line-height:1.5}
-.pricing-section{max-width:960px;margin:0 auto;padding:4rem 2rem}
-.section-title{text-align:center;margin-bottom:.5rem}
-.section-title h2{font-family:var(--ff-display);font-size:clamp(1.6rem,4vw,2.4rem);font-weight:700;font-style:italic}
-.section-sub{text-align:center;color:var(--ink2);font-size:14px;margin-bottom:2.5rem}
-.plans-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;align-items:start}
-.plan-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r2);padding:2rem;position:relative;box-shadow:var(--shadow)}
-.plan-card.featured{border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,168,75,.12),var(--shadow-lg)}
-.plan-badge-top{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);color:#fff;font-size:11px;font-weight:700;padding:4px 14px;border-radius:99px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
-.plan-name{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);margin-bottom:.5rem}
-.plan-price{font-family:var(--ff-display);font-size:2.8rem;font-weight:900;line-height:1;margin-bottom:.25rem}
-.plan-price sup{font-size:1.2rem;vertical-align:top;margin-top:.4rem;font-family:var(--ff-body);font-weight:600}
-.plan-price span{font-size:1rem;color:var(--ink2);font-family:var(--ff-body);font-weight:400}
-.plan-desc{font-size:13px;color:var(--ink2);margin:0.75rem 0 1.25rem;line-height:1.5}
-.plan-divider{height:1px;background:var(--border);margin:1.25rem 0}
-.plan-features{list-style:none;margin-bottom:1.5rem}
-.plan-features li{font-size:13px;padding:5px 0;display:flex;align-items:center;gap:8px;color:var(--ink2)}
-.plan-features li::before{content:'✓';color:var(--green);font-weight:700;font-size:12px;flex-shrink:0}
-.plan-features li.no::before{content:'✗';color:#ccc}
-.plan-features li.no{color:var(--ink3)}
-.plan-cta{width:100%}
-.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem}
-.auth-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:2.5rem;width:100%;max-width:420px;box-shadow:var(--shadow-lg)}
-.auth-card h2{font-family:var(--ff-display);font-size:1.8rem;font-weight:700;font-style:italic;margin-bottom:.25rem}
-.auth-card p{font-size:13px;color:var(--ink2);margin-bottom:1.75rem}
-.field{margin-bottom:1rem}
-.field label{display:block;font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--ink2);margin-bottom:5px;text-transform:uppercase}
-.field input,.field select,.field textarea{width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:var(--r);font-family:var(--ff-body);font-size:14px;color:var(--ink);background:var(--bg);outline:none;transition:border-color .15s}
-.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold)}
-.field textarea{min-height:120px;resize:vertical}
-.auth-switch{text-align:center;margin-top:1.25rem;font-size:13px;color:var(--ink2)}
-.auth-switch a{color:var(--gold);cursor:pointer;font-weight:500;text-decoration:none}
-.auth-error{background:#ffeaea;border:1px solid #f5c6cb;border-radius:var(--r);padding:10px 14px;font-size:13px;color:var(--red);margin-bottom:1rem;display:none}
-.dash-layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 60px)}
-.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:1.5rem 1rem}
-.sidebar-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);padding:0 10px;margin-bottom:.5rem;margin-top:1rem}
-.sidebar-label:first-child{margin-top:0}
-.sidebar-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--r);font-size:13px;font-weight:500;color:var(--ink2);cursor:pointer;transition:all .15s;text-decoration:none;width:100%;border:none;background:none;font-family:var(--ff-body)}
-.sidebar-item:hover{background:var(--bg2);color:var(--ink)}
-.sidebar-item.active{background:var(--goldbg);color:var(--gold);font-weight:600}
-.sidebar-item .si-icon{font-size:15px;flex-shrink:0}
-.main-content{padding:2rem;overflow-y:auto}
-.main-content h2{font-family:var(--ff-display);font-size:1.6rem;font-weight:700;font-style:italic;margin-bottom:.25rem}
-.main-content .subtitle{font-size:13px;color:var(--ink2);margin-bottom:2rem}
-.usage-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem;margin-bottom:1.5rem;box-shadow:var(--shadow)}
-.usage-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem}
-.usage-header h4{font-size:13px;font-weight:600}
-.usage-count{font-size:12px;color:var(--ink2)}
-.usage-bar-track{height:6px;background:var(--bg2);border-radius:99px;overflow:hidden}
-.usage-bar-fill{height:100%;border-radius:99px;background:var(--gold);transition:width .4s ease}
-.usage-bar-fill.full{background:var(--red)}
-.usage-note{font-size:11px;color:var(--ink3);margin-top:.5rem}
-.tool-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:1.5rem;box-shadow:var(--shadow)}
-.tool-actions{display:flex;gap:8px;flex-wrap:wrap;margin:1rem 0}
-.tool-btn{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:99px;border:1.5px solid var(--border);background:var(--bg);color:var(--ink);font-family:var(--ff-body);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s}
-.tool-btn:hover{background:var(--bg2);border-color:#bbb}
-.tool-btn:disabled{opacity:.4;cursor:not-allowed}
-.tabs-row{display:flex;border-bottom:1px solid var(--border);margin-bottom:1.25rem}
-.tab{padding:9px 18px;font-size:13px;font-weight:500;color:var(--ink2);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:var(--ff-body);transition:all .15s}
-.tab:hover{color:var(--ink)}
-.tab.on-flash{color:var(--gold);border-bottom-color:var(--gold)}
-.tab.on-podcast{color:var(--blue);border-bottom-color:var(--blue)}
-.tab.on-explain{color:var(--green);border-bottom-color:var(--green)}
-.tab-count{font-size:10px;background:var(--goldbg);color:var(--gold);padding:1px 6px;border-radius:99px;margin-left:5px;font-weight:700;display:none}
-.tab-pane{display:none;animation:fadeUp .25s ease}
-.tab-pane.visible{display:block}
-@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:1rem}
-.fc{background:var(--bg);border:1.5px solid var(--border);border-radius:var(--r);padding:1.1rem;cursor:pointer;transition:all .15s;position:relative}
-.fc:hover{border-color:var(--gold);box-shadow:0 2px 8px rgba(200,168,75,.12)}
-.fc .ql{font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--gold);text-transform:uppercase;margin-bottom:6px}
-.fc .qt{font-size:13px;font-weight:500;color:var(--ink);line-height:1.5}
-.fc .ab{display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
-.fc .ab.show{display:block}
-.fc .al{font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--blue);text-transform:uppercase;margin-bottom:5px}
-.fc .at{font-size:12px;color:var(--ink2);line-height:1.55}
-.fc .hint{font-size:10px;color:var(--ink3);margin-top:8px}
-.fc-tts{font-size:11px;padding:3px 9px;border-radius:99px;border:1px solid var(--border);background:transparent;color:var(--ink3);cursor:pointer;font-family:var(--ff-body);margin-top:8px;transition:all .15s}
-.fc-tts:hover{border-color:var(--gold);color:var(--gold)}
-.fc-tts.sp{border-color:var(--gold);color:var(--gold)}
-.pod-box2{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
-.pod-top2{padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.pod-top2 h4{font-family:var(--ff-display);font-size:15px;font-weight:700;font-style:italic}
-.pod-controls2{display:flex;gap:8px;align-items:center}
-.pod-voices{display:flex;gap:12px;padding:.75rem 1.25rem;background:var(--surface);border-bottom:1px solid var(--border);flex-wrap:wrap}
-.voice-badge{display:flex;align-items:center;gap:8px;font-size:12px}
-.voice-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.voice-dot.alex{background:#c8a84b}
-.voice-dot.jordan{background:#1d4e89}
-.voice-name{font-weight:600;color:var(--ink)}
-.voice-label{color:var(--ink3);font-size:11px}
-.pod-script{padding:1.25rem;max-height:400px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}
-.pod-script::-webkit-scrollbar{width:3px}
-.pod-script::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-.pod-line{display:flex;gap:10px;padding:8px 10px;border-radius:8px;transition:background .2s,opacity .2s;opacity:.55}
-.pod-line.active{opacity:1;background:var(--goldbg)}
-.pod-line[data-speaker="Jordan"].active{background:var(--bluebg)}
-.pod-speaker{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;min-width:52px;padding-top:2px;flex-shrink:0}
-.pod-speaker.alex{color:var(--gold)}
-.pod-speaker.jordan{color:var(--blue)}
-.pod-text{font-size:13px;color:var(--ink2);line-height:1.6}
-.pod-foot2{padding:.75rem 1.25rem;border-top:1px solid var(--border);font-size:11px;color:var(--ink3);display:flex;align-items:center;gap:8px}
-.pod-foot2.live{color:var(--blue)}
-.pod-progress{font-size:11px;color:var(--ink3);margin-left:auto}
-.speed-select{font-size:11px;padding:3px 8px;border-radius:99px;border:1px solid var(--border);background:var(--bg);color:var(--ink);font-family:var(--ff-body);cursor:pointer}
-.exp-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
-.exp-top{padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.exp-top span{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--green)}
-.exp-body{padding:1.25rem;font-size:14px;color:var(--ink2);line-height:1.85;white-space:pre-wrap}
-.ld{display:flex;align-items:center;gap:10px;padding:1.5rem 0;font-size:13px;color:var(--ink2)}
-.spin{width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:sp .6s linear infinite;flex-shrink:0}
-@keyframes sp{to{transform:rotate(360deg)}}
-.upgrade-wall{text-align:center;padding:3rem 1rem;background:var(--goldbg);border:1.5px dashed var(--gold);border-radius:var(--r2);margin-top:1rem}
-.upgrade-wall h3{font-family:var(--ff-display);font-size:1.3rem;font-weight:700;font-style:italic;margin-bottom:.5rem}
-.upgrade-wall p{font-size:13px;color:var(--ink2);margin-bottom:1.25rem}
-.billing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:1rem}
-.billing-plan{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r2);padding:1.5rem;position:relative}
-.billing-plan.current{border-color:var(--gold);background:var(--goldbg)}
-.billing-plan .bp-name{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);margin-bottom:.5rem}
-.billing-plan .bp-price{font-family:var(--ff-display);font-size:2rem;font-weight:900;margin-bottom:.5rem}
-.billing-plan .bp-features{list-style:none;margin:1rem 0}
-.billing-plan .bp-features li{font-size:12px;color:var(--ink2);padding:3px 0;display:flex;gap:7px}
-.billing-plan .bp-features li::before{content:'✓';color:var(--green);font-weight:700}
-.paypal-container{margin-top:1rem;min-height:45px}
-.current-label{position:absolute;top:-10px;right:16px;background:var(--gold);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;letter-spacing:.06em;text-transform:uppercase}
-#toast{position:fixed;bottom:24px;right:24px;background:var(--ink);color:#fff;padding:10px 18px;border-radius:var(--r);font-size:13px;font-weight:500;opacity:0;transition:opacity .25s;pointer-events:none;z-index:9999}
-#toast.show{opacity:1}
-.empty{padding:2.5rem;text-align:center;font-size:13px;color:var(--ink3)}
-.err-msg{color:var(--red);font-size:13px;padding:1.5rem 0}
-@media(max-width:700px){
-  .dash-layout{grid-template-columns:1fr}
-  .sidebar{display:flex;overflow-x:auto;padding:.75rem;gap:4px;border-right:none;border-bottom:1px solid var(--border)}
-  .sidebar-label{display:none}
-  .sidebar-item{flex-shrink:0;padding:7px 12px}
-  .fc-grid{grid-template-columns:1fr}
-  .billing-grid{grid-template-columns:1fr}
-  .hero h1{font-size:2rem}
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyAI — Learn Smarter</title>
+  <style>
+    :root{
+      --bg:#f7f9fc; --surface:#fff; --ink:#111827; --muted:#667085;
+      --blue:#2563eb; --blue-dark:#1d4ed8; --line:#e5e7eb;
+      --soft:#eff6ff; --radius:20px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+    a{text-decoration:none;color:inherit}
+    .container{width:min(1120px,92%);margin:auto}
+    nav{height:72px;background:rgba(255,255,255,.9);backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}
+    .nav-inner{height:100%;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-size:22px;font-weight:800;letter-spacing:-.04em}
+    .logo span{color:var(--blue)}
+    .links{display:flex;gap:28px;color:#475467;font-size:14px}
+    .nav-actions{display:flex;gap:10px;align-items:center}
+    .btn{display:inline-flex;align-items:center;justify-content:center;padding:11px 18px;
+      border:1px solid var(--line);border-radius:12px;background:#fff;font-weight:650;font-size:14px;cursor:pointer}
+    .btn-primary{background:var(--blue);border-color:var(--blue);color:#fff}
+    .btn-primary:hover{background:var(--blue-dark)}
+    .hero{padding:88px 0 70px;text-align:center}
+    .pill{display:inline-block;background:var(--soft);color:var(--blue);padding:7px 13px;
+      border-radius:999px;font-size:12px;font-weight:700;margin-bottom:20px}
+    h1{font-size:clamp(42px,7vw,72px);line-height:1.02;letter-spacing:-.055em;max-width:850px;margin:auto}
+    h1 span{color:var(--blue)}
+    .hero p{max-width:650px;margin:22px auto 30px;color:var(--muted);font-size:18px}
+    .hero-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+    .preview{margin:45px auto 0;max-width:950px;background:#111827;border-radius:24px;padding:12px;
+      box-shadow:0 25px 70px rgba(16,24,40,.18)}
+    .preview-window{background:#f8fafc;border-radius:16px;padding:25px;text-align:left;min-height:290px}
+    .fake-top{display:flex;gap:8px;margin-bottom:22px}.dot{width:9px;height:9px;border-radius:50%;background:#d0d5dd}
+    .dash{display:grid;grid-template-columns:180px 1fr;gap:18px}.fake-side,.fake-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px}
+    .fake-side div{height:11px;background:#eef2f6;border-radius:8px;margin-bottom:13px}
+    .fake-card h3{font-size:19px;margin-bottom:7px}.fake-card p{font-size:13px;color:var(--muted);margin-bottom:18px}
+    .fake-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .fake-box{height:80px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px}
+    .fake-box b{display:block;font-size:12px;margin-bottom:7px}.fake-box span{font-size:11px;color:var(--muted)}
+    section{padding:78px 0}.section-head{text-align:center;max-width:650px;margin:0 auto 42px}
+    .section-head h2{font-size:38px;letter-spacing:-.04em}.section-head p{color:var(--muted);margin-top:10px}
+    .features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .feature{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:25px}
+    .icon{width:42px;height:42px;display:grid;place-items:center;background:var(--soft);border-radius:12px;font-size:20px;margin-bottom:18px}
+    .feature h3{font-size:17px;margin-bottom:7px}.feature p{font-size:14px;color:var(--muted)}
+    .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.step{text-align:center;padding:25px}
+    .num{margin:auto auto 14px;width:38px;height:38px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:800}
+    .pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.price{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:28px}
+    .price.featured{border:2px solid var(--blue);position:relative}.popular{position:absolute;top:-13px;right:20px;background:var(--blue);color:#fff;padding:5px 10px;border-radius:999px;font-size:11px;font-weight:800}
+    .price h3{font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:#667085}.amount{font-size:42px;font-weight:800;margin:12px 0}.amount small{font-size:14px;color:var(--muted);font-weight:500}
+    .price ul{list-style:none;margin:20px 0}.price li{padding:7px 0;font-size:14px;color:#475467}.price li:before{content:"✓";color:var(--blue);font-weight:800;margin-right:8px}
+    .price .btn{width:100%}
+    .cta{background:#111827;color:#fff;border-radius:28px;padding:60px 30px;text-align:center}.cta p{color:#cbd5e1;max-width:600px;margin:12px auto 24px}
+    footer{border-top:1px solid var(--line);padding:28px 0;color:var(--muted);font-size:13px}
+    .footer-inner{display:flex;justify-content:space-between;gap:15px}
+    @media(max-width:800px){.links{display:none}.features,.pricing,.steps{grid-template-columns:1fr}.dash{grid-template-columns:1fr}.fake-side{display:none}.hero{padding-top:60px}.footer-inner{flex-direction:column}}
+  </style>
 </head>
 <body>
-
-<!-- NAV -->
-<nav id="main-nav" style="display:none">
-  <div class="nav-logo" onclick="goHome()">Study<em>AI</em></div>
-  <div class="nav-right">
-    <span class="nav-plan-badge badge-free" id="nav-badge">Free</span>
-    <button class="btn btn-sm" id="nav-login-btn" onclick="showPage('login')" style="display:none">Log in</button>
-    <button class="btn btn-sm btn-primary" id="nav-signup-btn" onclick="showPage('signup')" style="display:none">Get started</button>
-    <button class="btn btn-sm" id="nav-logout-btn" onclick="logout()" style="display:none">Log out</button>
-  </div>
-</nav>
-
-<!-- LANDING PAGE -->
-<div class="page active" id="page-landing">
-  <section class="hero">
-    <div class="hero-eyebrow">AI-Powered Learning</div>
-    <h1>Study smarter,<br><span>remember more</span></h1>
-    <p>Turn any study material into flashcards, podcast scripts, and simplified explanations — powered by AI.</p>
-    <div class="hero-cta">
-      <button class="btn btn-primary btn-lg" onclick="showPage('signup')">Start for free</button>
-      <button class="btn btn-lg" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">See pricing</button>
-    </div>
-  </section>
-  <section class="features">
-    <div class="features-grid">
-      <div class="feat"><div class="feat-icon">🃏</div><div class="feat-text"><h3>Flashcards</h3><p>Auto-generate tap-to-reveal Q&A cards.</p></div></div>
-      <div class="feat"><div class="feat-icon">🎙️</div><div class="feat-text"><h3>Podcast scripts</h3><p>Turn notes into a fun two-host conversation.</p></div></div>
-      <div class="feat"><div class="feat-icon">💡</div><div class="feat-text"><h3>Simplified explanations</h3><p>Complex topics rewritten for anyone.</p></div></div>
-      <div class="feat"><div class="feat-icon">🔊</div><div class="feat-text"><h3>Text-to-speech</h3><p>Listen to every flashcard or podcast aloud.</p></div></div>
-    </div>
-  </section>
-  <section class="pricing-section" id="pricing">
-    <div class="section-title"><h2>Simple, honest pricing</h2></div>
-    <div class="section-sub">Start free. Upgrade when you need more.</div>
-    <div class="plans-grid">
-      <div class="plan-card">
-        <div class="plan-name">Free</div>
-        <div class="plan-price">$0<span>/mo</span></div>
-        <div class="plan-desc">Perfect for trying things out.</div>
-        <div class="plan-divider"></div>
-        <ul class="plan-features">
-          <li>5 generations per day</li><li>Flashcards only</li><li>Text-to-speech</li>
-          <li class="no">Podcast scripts</li><li class="no">Simplified explanations</li><li class="no">Unlimited generations</li>
-        </ul>
-        <button class="btn plan-cta" onclick="showPage('signup')">Get started free</button>
+  <nav>
+    <div class="container nav-inner">
+      <a class="logo" href="#">Study<span>AI</span></a>
+      <div class="links">
+        <a href="#features">Features</a><a href="#how">How it works</a><a href="#pricing">Pricing</a>
       </div>
-      <div class="plan-card">
-        <div class="plan-name">Basic</div>
-        <div class="plan-price">$<span style="font-size:2.8rem;font-family:var(--ff-display);font-weight:900;color:var(--ink)">7</span><span>/mo</span></div>
-        <div class="plan-desc">For students who study daily.</div>
-        <div class="plan-divider"></div>
-        <ul class="plan-features">
-          <li>30 generations per day</li><li>Flashcards</li><li>Podcast scripts</li><li>Text-to-speech</li>
-          <li class="no">Simplified explanations</li><li class="no">Unlimited generations</li>
-        </ul>
-        <button class="btn btn-primary plan-cta" onclick="startUpgrade('basic')">Upgrade to Basic</button>
-      </div>
-      <div class="plan-card featured">
-        <div class="plan-badge-top">Most popular</div>
-        <div class="plan-name">Pro</div>
-        <div class="plan-price" style="color:var(--gold)">$<span style="font-size:2.8rem;font-family:var(--ff-display);font-weight:900;color:var(--gold)">15</span><span>/mo</span></div>
-        <div class="plan-desc">Everything, unlimited.</div>
-        <div class="plan-divider"></div>
-        <ul class="plan-features">
-          <li>Unlimited generations</li><li>Flashcards</li><li>Podcast scripts</li><li>Simplified explanations</li><li>Text-to-speech</li><li>Priority support</li>
-        </ul>
-        <button class="btn btn-gold plan-cta" onclick="startUpgrade('pro')">Upgrade to Pro</button>
+      <div class="nav-actions">
+        <a class="btn" href="StudyAi_FIve.html">Log in</a>
+        <a class="btn btn-primary" href="StudyAi_FIve.html">Get started</a>
       </div>
     </div>
-  </section>
-  <footer style="text-align:center;padding:2rem;font-size:12px;color:var(--ink3);border-top:1px solid var(--border)">© 2025 StudyAI · Built with OpenRouter</footer>
-</div>
+  </nav>
 
-<!-- SIGNUP PAGE -->
-<div class="page" id="page-signup">
-  <div class="auth-wrap"><div class="auth-card">
-    <h2>Create your account</h2><p>Start for free. No credit card required.</p>
-    <div class="auth-error" id="signup-error"></div>
-    <div class="field"><label>Full name</label><input type="text" id="su-name" placeholder="Jane Doe"></div>
-    <div class="field"><label>Email</label><input type="email" id="su-email" placeholder="jane@example.com"></div>
-    <div class="field"><label>Password</label><input type="password" id="su-pass" placeholder="Min. 6 characters"></div>
-    <button class="btn btn-primary btn-lg" style="width:100%" onclick="doSignup()">Create account</button>
-    <div class="auth-switch">Already have an account? <a onclick="showPage('login')">Log in</a></div>
-  </div></div>
-</div>
-
-<!-- LOGIN PAGE -->
-<div class="page" id="page-login">
-  <div class="auth-wrap"><div class="auth-card">
-    <h2>Welcome back</h2><p>Log in to your StudyAI account.</p>
-    <div class="auth-error" id="login-error"></div>
-    <div class="field"><label>Email</label><input type="email" id="li-email" placeholder="jane@example.com"></div>
-    <div class="field"><label>Password</label><input type="password" id="li-pass" placeholder="Your password"></div>
-    <button class="btn btn-primary btn-lg" style="width:100%" onclick="doLogin()">Log in</button>
-    <div class="auth-switch">Don't have an account? <a onclick="showPage('signup')">Sign up free</a></div>
-  </div></div>
-</div>
-
-<!-- DASHBOARD -->
-<div class="page" id="page-dashboard">
-  <div class="dash-layout">
-    <div class="sidebar">
-      <div class="sidebar-label">Tools</div>
-      <button class="sidebar-item active" id="sb-study" onclick="showDash('study')"><span class="si-icon">📚</span> Study tool</button>
-      <div class="sidebar-label">Account</div>
-      <button class="sidebar-item" id="sb-billing" onclick="showDash('billing')"><span class="si-icon">💳</span> Billing</button>
-      <button class="sidebar-item" id="sb-settings" onclick="showDash('settings')"><span class="si-icon">🔑</span> Settings</button>
-      <div id="sb-admin-wrap" style="display:none"><div class="sidebar-label">Owner</div><button class="sidebar-item" id="sb-admin" onclick="showDash('admin')"><span class="si-icon">⚙️</span> Admin panel</button></div>
-    </div>
-    <div class="main-content">
-      <!-- STUDY PANEL -->
-      <div id="dash-study">
-        <h2>Study tool</h2><p class="subtitle">Paste any material and let AI do the work.</p>
-        <div class="usage-card">
-          <div class="usage-header"><h4>Daily generations</h4><span class="usage-count" id="usage-text">0 / 5</span></div>
-          <div class="usage-bar-track"><div class="usage-bar-fill" id="usage-fill" style="width:0%"></div></div>
-          <div class="usage-note" id="usage-note">Resets at midnight · <a onclick="showDash('billing')" style="color:var(--gold);cursor:pointer">Upgrade for more</a></div>
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="pill">✦ AI-powered learning</div>
+        <h1>Study smarter.<br><span>Remember more.</span></h1>
+        <p>Turn your notes and study material into useful learning tools with AI — from flashcards and explanations to engaging podcast-style lessons.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="StudyAi_FIve.html">Start for free →</a>
+          <a class="btn" href="#features">Explore features</a>
         </div>
-        <div class="tool-card">
-          <div class="field"><label>Your study material</label><textarea id="study-input" placeholder="Paste your notes, article, textbook excerpt…"></textarea></div>
-          <div class="tool-actions">
-            <button class="tool-btn" id="tbtn-flash" onclick="generate('flashcards')">🃏 Flashcards</button>
-            <button class="tool-btn" id="tbtn-podcast" onclick="generate('podcast')">🎙️ Podcast</button>
-            <button class="tool-btn" id="tbtn-explain" onclick="generate('explain')">💡 Explain</button>
-          </div>
-          <div id="output-area" style="display:none">
-            <div class="tabs-row">
-              <button class="tab" id="tab-flash" onclick="switchTab('flash')">Flashcards <span class="tab-count" id="fc-cnt"></span></button>
-              <button class="tab" id="tab-podcast" onclick="switchTab('podcast')">Podcast</button>
-              <button class="tab" id="tab-explain" onclick="switchTab('explain')">Explanation</button>
+        <div class="preview">
+          <div class="preview-window">
+            <div class="fake-top"><i class="dot"></i><i class="dot"></i><i class="dot"></i></div>
+            <div class="dash">
+              <div class="fake-side"><div></div><div></div><div></div><div></div></div>
+              <div class="fake-card">
+                <h3>Your study workspace</h3>
+                <p>Paste your material and choose how you want to learn.</p>
+                <div class="fake-grid">
+                  <div class="fake-box"><b>🃏 Flashcards</b><span>Practice key ideas</span></div>
+                  <div class="fake-box"><b>🎙️ Podcast</b><span>Learn by listening</span></div>
+                  <div class="fake-box"><b>💡 Explain</b><span>Simplify hard topics</span></div>
+                </div>
+              </div>
             </div>
-            <div class="tab-pane" id="tp-flash"><div class="empty">Generate flashcards to see them here.</div></div>
-            <div class="tab-pane" id="tp-podcast"><div class="empty">Generate a podcast to see it here.</div></div>
-            <div class="tab-pane" id="tp-explain"><div class="empty">Generate an explanation to see it here.</div></div>
           </div>
         </div>
       </div>
-      <!-- SETTINGS PANEL -->
-      <div id="dash-settings" style="display:none">
-        <h2>API Settings</h2><p class="subtitle">Enter your OpenRouter API key to enable AI features.</p>
-        <div class="tool-card">
-          <div class="field">
-            <label>OpenRouter API Key</label>
-            <input type="password" id="api-key-input" placeholder="sk-or-v1-...">
-            <div style="font-size:12px; color:var(--ink3); margin-top:6px">Get a key at <a href="https://openrouter.ai/keys" target="_blank" style="color:var(--gold)">openrouter.ai/keys</a></div>
-          </div>
-          <button class="btn btn-primary" onclick="saveApiKey()">Save Key</button>
-          <button class="btn" onclick="clearApiKey()">Clear</button>
-          <p id="api-key-status" style="margin-top:12px; font-size:13px"></p>
+    </section>
+
+    <section id="features">
+      <div class="container">
+        <div class="section-head"><h2>Everything you need to study better</h2><p>A focused set of tools designed around the way students actually learn.</p></div>
+        <div class="features">
+          <div class="feature"><div class="icon">🃏</div><h3>Smart flashcards</h3><p>Turn study material into question-and-answer cards you can use for active recall.</p></div>
+          <div class="feature"><div class="icon">🎙️</div><h3>AI podcast lessons</h3><p>Transform your material into a natural conversation between two hosts.</p></div>
+          <div class="feature"><div class="icon">💡</div><h3>Simple explanations</h3><p>Break complicated concepts down into clearer, easier-to-understand language.</p></div>
+          <div class="feature"><div class="icon">🔊</div><h3>Listen aloud</h3><p>Use text-to-speech to review flashcards and generated learning content.</p></div>
+          <div class="feature"><div class="icon">📚</div><h3>One workspace</h3><p>Keep your study tools together instead of jumping between different apps.</p></div>
+          <div class="feature"><div class="icon">⚡</div><h3>Fast generation</h3><p>Paste your material, choose a tool, and turn it into a study resource.</p></div>
         </div>
       </div>
-      <!-- ADMIN PANEL -->
-      <div id="dash-admin" style="display:none"></div>
-      <!-- BILLING PANEL -->
-      <div id="dash-billing" style="display:none">
-        <h2>Billing & plans</h2><p class="subtitle">Manage your subscription.</p>
-        <div class="billing-grid" id="billing-grid"></div>
+    </section>
+
+    <section id="how">
+      <div class="container">
+        <div class="section-head"><h2>Three simple steps</h2><p>Go from raw notes to an active study session in minutes.</p></div>
+        <div class="steps">
+          <div class="step"><div class="num">1</div><h3>Add your material</h3><p>Paste notes, textbook sections, or other study content into your workspace.</p></div>
+          <div class="step"><div class="num">2</div><h3>Choose a tool</h3><p>Generate flashcards, a podcast lesson, or a simplified explanation.</p></div>
+          <div class="step"><div class="num">3</div><h3>Start learning</h3><p>Review, listen, test yourself, and come back whenever you need another session.</p></div>
+        </div>
       </div>
-    </div>
-  </div>
-</div>
+    </section>
 
-<div id="toast"></div>
+    <section id="pricing">
+      <div class="container">
+        <div class="section-head"><h2>Simple pricing</h2><p>Start small and upgrade when you need more study power.</p></div>
+        <div class="pricing">
+          <div class="price"><h3>Free</h3><div class="amount">$0 <small>/ month</small></div><ul><li>5 generations/day</li><li>Flashcards</li><li>Text-to-speech</li></ul><a class="btn" href="StudyAi_FIve.html">Get started</a></div>
+          <div class="price featured"><div class="popular">POPULAR</div><h3>Basic</h3><div class="amount">$7 <small>/ month</small></div><ul><li>30 generations/day</li><li>Flashcards</li><li>Podcast scripts</li><li>Text-to-speech</li></ul><a class="btn btn-primary" href="StudyAi_FIve.html">Choose Basic</a></div>
+          <div class="price"><h3>Pro</h3><div class="amount">$15 <small>/ month</small></div><ul><li>Unlimited generations</li><li>All study tools</li><li>Text-to-speech</li><li>Priority support</li></ul><a class="btn" href="StudyAi_FIve.html">Choose Pro</a></div>
+        </div>
+      </div>
+    </section>
 
-<script>
-// DATA STORE
-const DB = {
-  get users(){ try{return JSON.parse(localStorage.getItem('sai_users')||'{}')}catch{return{}} },
-  set users(v){ localStorage.setItem('sai_users',JSON.stringify(v)) },
-  get session(){ try{return JSON.parse(localStorage.getItem('sai_session')||'null')}catch{return null} },
-  set session(v){ localStorage.setItem('sai_session',JSON.stringify(v)) },
-};
-const PLANS = {
-  free: { name:'Free', price:'$0/mo', daily:5, features:['flashcards'], label:'Free' },
-  basic:{ name:'Basic', price:'$7/mo', daily:30, features:['flashcards','podcast'], label:'Basic' },
-  pro:  { name:'Pro', price:'$15/mo', daily:999, features:['flashcards','podcast','explain'], label:'Pro' },
-};
+    <section>
+      <div class="container">
+        <div class="cta"><h2>Ready to study smarter?</h2><p>Start with your existing StudyAI app and grow it into a complete learning platform.</p><a class="btn btn-primary" href="StudyAi_FIve.html">Open StudyAI →</a></div>
+      </div>
+    </section>
+  </main>
 
-function currentUser(){ const s=DB.session; return s?DB.users[s.email]:null; }
-function saveUser(u){ const db=DB.users; db[u.email]=u; DB.users=db; }
-function todayKey(){ return new Date().toISOString().slice(0,10); }
-function getUsage(){ const u=currentUser(); return u?((u.usage||{})[todayKey()]||0):0; }
-function incUsage(){ const u=currentUser(); if(!u) return; if(!u.usage) u.usage={}; u.usage[todayKey()]=(u.usage[todayKey()]||0)+1; saveUser(u); }
-function canGenerate(type){ const u=currentUser(); if(!u) return false; const plan=PLANS[u.plan||'free']; return plan.features.includes(type) && getUsage()<plan.daily; }
-
-// NAVIGATION
-function showPage(name){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-'+name).classList.add('active');
-  const nav=document.getElementById('main-nav');
-  const u=currentUser();
-  nav.style.display= name==='landing'?'none':'flex';
-  if(u){
-    document.getElementById('nav-login-btn').style.display='none';
-    document.getElementById('nav-signup-btn').style.display='none';
-    document.getElementById('nav-logout-btn').style.display='flex';
-    const badge=document.getElementById('nav-badge');
-    badge.textContent=PLANS[u.plan||'free'].label;
-    badge.className='nav-plan-badge badge-'+(u.plan||'free');
-    badge.style.display='flex';
-  } else {
-    document.getElementById('nav-login-btn').style.display='flex';
-    document.getElementById('nav-signup-btn').style.display='flex';
-    document.getElementById('nav-logout-btn').style.display='none';
-    document.getElementById('nav-badge').style.display='none';
-  }
-}
-function goHome(){ showPage(currentUser()?'dashboard':'landing'); }
-
-// AUTH
-function doSignup(){
-  const name=document.getElementById('su-name').value.trim();
-  const email=document.getElementById('su-email').value.trim().toLowerCase();
-  const pass=document.getElementById('su-pass').value;
-  const err=document.getElementById('signup-error');
-  err.style.display='none';
-  if(!name||!email||!pass){ err.textContent='Please fill in all fields.'; err.style.display='block'; return; }
-  if(pass.length<6){ err.textContent='Password must be at least 6 characters.'; err.style.display='block'; return; }
-  const db=DB.users;
-  if(db[email]){ err.textContent='An account with this email already exists.'; err.style.display='block'; return; }
-  const user={name,email,pass,plan:'free',joinedAt:Date.now(),usage:{}};
-  saveUser(user);
-  DB.session={email};
-  showPage('dashboard');
-  initDash();
-  toast('Welcome to StudyAI, '+name+'! 🎉');
-}
-function doLogin(){
-  const email=document.getElementById('li-email').value.trim().toLowerCase();
-  const pass=document.getElementById('li-pass').value;
-  const err=document.getElementById('login-error');
-  err.style.display='none';
-  const db=DB.users;
-  if(!db[email]||db[email].pass!==pass){ err.textContent='Incorrect email or password.'; err.style.display='block'; return; }
-  DB.session={email};
-  showPage('dashboard');
-  initDash();
-  toast('Welcome back, '+db[email].name+'!');
-}
-function logout(){
-  DB.session=null;
-  stopSpeech();
-  showPage('landing');
-  toast('Logged out.');
-}
-
-// DASHBOARD
-function initDash(){
-  updateUsageBar();
-  const u=currentUser();
-  document.getElementById('sb-admin-wrap').style.display=(u&&u.isOwner)?'block':'none';
-  showDash('study');
-}
-function showDash(panel){
-  ['study','billing','admin','settings'].forEach(p=>{
-    const el=document.getElementById('dash-'+p);
-    if(el) el.style.display=p===panel?'block':'none';
-  });
-  document.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active'));
-  document.getElementById('sb-'+panel)?.classList.add('active');
-  if(panel==='billing') renderBilling();
-  if(panel==='admin') renderAdmin();
-  if(panel==='settings'){ document.getElementById('api-key-input').value = getApiKey(); }
-}
-function updateUsageBar(){
-  const u=currentUser(); if(!u) return;
-  const plan=PLANS[u.plan||'free'];
-  const used=getUsage();
-  const pct=plan.daily>=999?0:Math.min(100,Math.round(used/plan.daily*100));
-  document.getElementById('usage-text').textContent=plan.daily>=999?used+' / ∞':used+' / '+plan.daily;
-  const fill=document.getElementById('usage-fill');
-  fill.style.width=pct+'%';
-  fill.className='usage-bar-fill'+(pct>=100?' full':'');
-  const note=document.getElementById('usage-note');
-  if(u.plan==='pro') note.innerHTML='Unlimited generations on Pro ✓';
-  else note.innerHTML='Resets at midnight · <a onclick="showDash(\'billing\')" style="color:var(--gold);cursor:pointer">Upgrade for more</a>';
-}
-
-// TTS
-let speaking=false, activeTTSBtn=null;
-function stopSpeech(){ if(window.speechSynthesis) window.speechSynthesis.cancel(); speaking=false; if(activeTTSBtn){ activeTTSBtn.classList.remove('sp'); activeTTSBtn.textContent=activeTTSBtn._idle||'▶'; activeTTSBtn=null; } }
-function speakText(text,btn,idle,active){
-  if(!window.speechSynthesis){ toast('TTS not supported.'); return; }
-  if(speaking&&activeTTSBtn===btn){ stopSpeech(); return; }
-  stopSpeech();
-  const u=new SpeechSynthesisUtterance(text); u.rate=0.95;
-  u.onend=()=>{ speaking=false; if(activeTTSBtn){ activeTTSBtn.classList.remove('sp'); activeTTSBtn.textContent=idle; activeTTSBtn=null; } };
-  btn._idle=idle; btn.textContent=active; btn.classList.add('sp'); activeTTSBtn=btn; speaking=true;
-  window.speechSynthesis.speak(u);
-}
-
-// TABS
-function switchTab(name){
-  ['flash','podcast','explain'].forEach(t=>{
-    document.getElementById('tp-'+t).classList.remove('visible');
-    document.getElementById('tab-'+t).classList.remove('on-flash','on-podcast','on-explain');
-  });
-  document.getElementById('tp-'+name).classList.add('visible');
-  document.getElementById('tab-'+name).classList.add('on-'+name);
-  stopSpeech();
-}
-
-// API KEY MANAGEMENT
-function getApiKey(){ return localStorage.getItem('openrouter_api_key')||''; }
-function saveApiKey(){
-  const key=document.getElementById('api-key-input').value.trim();
-  if(!key){ toast('Please enter an API key'); return; }
-  localStorage.setItem('openrouter_api_key',key);
-  document.getElementById('api-key-status').textContent='✅ API key saved!';
-  toast('API key saved');
-}
-function clearApiKey(){
-  localStorage.removeItem('openrouter_api_key');
-  document.getElementById('api-key-input').value='';
-  document.getElementById('api-key-status').textContent='API key cleared';
-  toast('API key cleared');
-}
-
-// GENERATE (OpenRouter)
-const TYPE_TO_FEATURE={flashcards:'flashcards',podcast:'podcast',explain:'explain'};
-const TYPE_TO_TAB={flashcards:'flash',podcast:'podcast',explain:'explain'};
-
-async function generate(type){
-  const text=document.getElementById('study-input').value.trim();
-  if(!text){ toast('Please paste some study material first.'); return; }
-  const apiKey=getApiKey();
-  if(!apiKey){ toast('Please enter your OpenRouter API key in Settings'); showDash('settings'); return; }
-  const feat=TYPE_TO_FEATURE[type];
-  const u=currentUser();
-  const plan=PLANS[u.plan||'free'];
-  if(!plan.features.includes(feat)){ showUpgradeWall(type,TYPE_TO_TAB[type]); return; }
-  if(getUsage()>=plan.daily){ showUpgradeWall('limit',TYPE_TO_TAB[type]); return; }
-
-  const btnId='tbtn-'+type.replace('flashcards','flash');
-  document.getElementById(btnId).disabled=true;
-  document.getElementById('output-area').style.display='block';
-  switchTab(TYPE_TO_TAB[type]);
-  const pane=document.getElementById('tp-'+TYPE_TO_TAB[type]);
-  pane.innerHTML='<div class="ld"><div class="spin"></div> AI is reasoning…</div>';
-
-  let system='', user='', schema={};
-  if(type==='flashcards'){
-    system='You are an expert educator. Generate flashcards from the study material.';
-    user=`Create 8 flashcards based on this material:\n\n${text}`;
-    schema={ name:'flashcards', strict:true, schema:{ type:'object', properties:{ cards:{ type:'array', items:{ type:'object', properties:{ q:{type:'string'}, a:{type:'string'} }, required:['q','a'], additionalProperties:false } } }, required:['cards'], additionalProperties:false } };
-  } else if(type==='podcast'){
-    system=`You are an award-winning podcast producer and science communicator. Create a deeply engaging, information-rich two-host conversation between Alex and Jordan. Follow these rules:
-- Alex is the enthusiastic expert who dives deep, uses vivid analogies, shares surprising facts, and explains mechanisms clearly.
-- Jordan is the curious, witty co-host who asks probing follow-up questions, challenges assumptions, relates ideas to real life, and occasionally plays devil's advocate.
-- The conversation must feel NATURAL — include moments of genuine surprise, "wait, really?", brief disagreements, jokes, and "aha" moments.
-- Pack in REAL, SPECIFIC information: statistics, named examples, historical context, mechanisms, counterintuitive facts, and practical implications.
-- Structure: open with a hook/surprising claim → explore core concepts with examples → dig into a counterintuitive angle → discuss real-world impact → close with a memorable takeaway.
-- Each line should be 1-3 sentences: substantive but conversational. Never vague or generic.
-- Vary sentence length and rhythm to sound like real speech.`;
-    user=`Turn this study material into a rich, information-packed podcast script for hosts Alex and Jordan. Include 24-30 exchanges. Make it feel like a genuinely fascinating conversation that teaches the listener something real. Don't just summarize — explain WHY things work, share surprising angles, and make complex ideas click.\n\nMaterial:\n${text}`;
-    schema={ name:'podcast_script', strict:true, schema:{ type:'object', properties:{ script:{ type:'array', items:{ type:'object', properties:{ speaker:{type:'string', enum:['Alex','Jordan']}, line:{type:'string'} }, required:['speaker','line'], additionalProperties:false } } }, required:['script'], additionalProperties:false } };
-  } else {
-    system='You are a brilliant teacher. Explain complex topics simply.';
-    user=`Explain this material in simple terms (about 200-300 words):\n\n${text}`;
-    schema={ name:'explanation', strict:true, schema:{ type:'object', properties:{ explanation:{type:'string'} }, required:['explanation'], additionalProperties:false } };
-  }
-
-  const payload={
-    model:'nvidia/nemotron-3-super-120b-a12b:free',
-    messages:[{role:'system',content:system},{role:'user',content:user}],
-    response_format:{ type:'json_schema', json_schema:schema },
-    reasoning:{ enabled: true }
-  };
-
-  try{
-    const res=await fetch('https://openrouter.ai/api/v1/chat/completions',{
-      method:'POST',
-      headers:{'Authorization':`Bearer ${apiKey}`,'Content-Type':'application/json'},
-      body:JSON.stringify(payload)
-    });
-    const data=await res.json();
-    if(!res.ok) throw new Error(data.error?.message||'API request failed');
-    const content=data.choices?.[0]?.message?.content;
-    if(!content) throw new Error('No content in response');
-    const parsed=JSON.parse(content);
-    incUsage(); updateUsageBar();
-    if(type==='flashcards') renderFlashcardsFromArray(parsed.cards,pane);
-    else if(type==='podcast') renderPodcastFromArray(parsed.script,pane);
-    else renderExplain(parsed.explanation,pane);
-  } catch(e){
-    pane.innerHTML=`<div class="err-msg">Error: ${esc(e.message)}</div>`;
-  }
-  document.getElementById(btnId).disabled=false;
-}
-
-function showUpgradeWall(type,tabName){
-  document.getElementById('output-area').style.display='block';
-  switchTab(tabName);
-  const pane=document.getElementById('tp-'+tabName);
-  const msgs={ podcast:'Podcast scripts are available on Basic and Pro plans.', explain:'Simplified explanations are available on the Pro plan.', limit:'You\'ve used all your daily generations. Upgrade for more.' };
-  pane.innerHTML=`<div class="upgrade-wall"><h3>Upgrade your plan</h3><p>${msgs[type]||'This feature requires an upgrade.'}</p><button class="btn btn-gold" onclick="showDash('billing')">View plans & upgrade</button></div>`;
-}
-
-// RENDER FUNCTIONS
-function renderFlashcardsFromArray(cards,pane){
-  const cnt=document.getElementById('fc-cnt'); cnt.textContent=cards.length; cnt.style.display='inline-block';
-  const allText=cards.map((c,i)=>`Card ${i+1}. Question: ${c.q}. Answer: ${c.a}.`).join(' ');
-  let html=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><span style="font-size:12px;color:var(--ink2)">Tap a card to reveal the answer.</span><button class="fc-tts" id="tts-all" onclick="speakText(${JSON.stringify(allText)},this,'🔊 Read all','⏹ Stop')">🔊 Read all</button></div><div class="fc-grid">`;
-  cards.forEach((c,i)=>{
-    const ct=`Question: ${c.q}. Answer: ${c.a}.`;
-    html+=`<div class="fc" onclick="flipFC(${i})"><div class="ql">Question</div><div class="qt">${esc(c.q)}</div><div class="ab" id="ab-${i}"><div class="al">Answer</div><div class="at">${esc(c.a)}</div></div><div style="display:flex;align-items:center;justify-content:space-between"><div class="hint" id="ht-${i}">tap to reveal</div><button class="fc-tts" onclick="event.stopPropagation();speakText(${JSON.stringify(ct)},this,'🔊 Read','⏹ Stop')">🔊 Read</button></div></div>`;
-  });
-  html+='</div>'; pane.innerHTML=html;
-}
-function flipFC(i){ const ab=document.getElementById('ab-'+i), ht=document.getElementById('ht-'+i); ab.classList.toggle('show'); ht.style.display=ab.classList.contains('show')?'none':'block'; }
-
-let podLines=[], podIdx=0, podPlaying=false, voiceAlex=null, voiceJordan=null, podSpeed=1.0;
-function loadVoices(){
-  return new Promise(resolve=>{
-    const vv=window.speechSynthesis.getVoices();
-    if(vv.length){ assignVoices(vv); resolve(); return; }
-    window.speechSynthesis.onvoiceschanged=()=>{ assignVoices(window.speechSynthesis.getVoices()); resolve(); };
-  });
-}
-function assignVoices(voices){
-  const en=voices.filter(v=>v.lang.startsWith('en'));
-  const male=en.filter(v=>/male|guy|daniel|david|james|tom|george|mark|alex|fred/i.test(v.name));
-  const female=en.filter(v=>/female|woman|lady|zira|victoria|samantha|karen|moira|tessa|veena|fiona/i.test(v.name));
-  const others=en.filter(v=>!male.includes(v)&&!female.includes(v));
-  voiceAlex=male[0]||others[0]||en[0]||voices[0];
-  voiceJordan=female[0]||others[1]||en[1]||voiceAlex;
-}
-function renderPodcastFromArray(script,pane){
-  podLines=script; podIdx=0; podPlaying=false;
-  const linesHtml=script.map((l,i)=>`<div class="pod-line" id="pl-${i}" data-speaker="${l.speaker}"><span class="pod-speaker ${l.speaker.toLowerCase()}">${esc(l.speaker)}</span><span class="pod-text">${esc(l.line)}</span></div>`).join('');
-  pane.innerHTML=`
-  <div class="pod-box2">
-    <div class="pod-top2"><h4>🎙️ Podcast — Alex & Jordan</h4><div class="pod-controls2"><select class="speed-select" id="pod-speed" onchange="updatePodSpeed()"><option value="0.8">0.8×</option><option value="0.9">0.9×</option><option value="1" selected>1×</option><option value="1.1">1.1×</option><option value="1.25">1.25×</option></select><button class="tool-btn" id="pod-play-btn" style="padding:6px 16px;font-size:12px" onclick="togglePodcast()">▶ Play</button><button class="tool-btn" style="padding:6px 12px;font-size:12px" onclick="restartPodcast()" title="Restart">↺</button></div></div>
-    <div class="pod-voices"><div class="voice-badge"><div class="voice-dot alex"></div><span class="voice-name">Alex</span><span class="voice-label" id="alex-voice-name">loading…</span></div><div class="voice-badge"><div class="voice-dot jordan"></div><span class="voice-name">Jordan</span><span class="voice-label" id="jordan-voice-name">loading…</span></div></div>
-    <div class="pod-script" id="pod-script">${linesHtml}</div>
-    <div class="pod-foot2" id="pod-status2"><span id="pod-status-text">Ready · ${script.length} lines</span><span class="pod-progress" id="pod-prog"></span></div>
-  </div>`;
-  loadVoices().then(()=>{
-    document.getElementById('alex-voice-name').textContent=voiceAlex?voiceAlex.name:'Default';
-    document.getElementById('jordan-voice-name').textContent=voiceJordan?voiceJordan.name:'Default';
-  });
-}
-function updatePodSpeed(){ podSpeed=parseFloat(document.getElementById('pod-speed')?.value||1); }
-function togglePodcast(){ podPlaying?pausePodcast():playPodcastFrom(podIdx); }
-function pausePodcast(){
-  podPlaying=false; window.speechSynthesis.cancel();
-  document.getElementById('pod-play-btn').textContent='▶ Resume';
-  const st=document.getElementById('pod-status2'); st.className='pod-foot2'; document.getElementById('pod-status-text').textContent='Paused';
-}
-function restartPodcast(){
-  podPlaying=false; podIdx=0; window.speechSynthesis.cancel();
-  document.querySelectorAll('.pod-line').forEach(l=>l.classList.remove('active'));
-  document.getElementById('pod-play-btn').textContent='▶ Play';
-  const st=document.getElementById('pod-status2'); st.className='pod-foot2'; document.getElementById('pod-status-text').textContent='Ready · '+podLines.length+' lines';
-  document.getElementById('pod-prog').textContent='';
-}
-function playPodcastFrom(idx){
-  if(idx>=podLines.length){ endPodcast(); return; }
-  podPlaying=true; podIdx=idx;
-  document.getElementById('pod-play-btn').textContent='⏸ Pause';
-  document.getElementById('pod-status2').className='pod-foot2 live';
-  speakLine(idx);
-}
-function speakLine(idx){
-  if(!podPlaying||idx>=podLines.length){ if(podPlaying) endPodcast(); return; }
-  const line=podLines[idx];
-  document.querySelectorAll('.pod-line').forEach((el,i)=>el.classList.toggle('active',i===idx));
-  document.getElementById('pl-'+idx)?.scrollIntoView({behavior:'smooth',block:'nearest'});
-  document.getElementById('pod-prog').textContent=(idx+1)+' / '+podLines.length;
-  document.getElementById('pod-status-text').textContent='▶ '+line.speaker+' speaking…';
-  const utter=new SpeechSynthesisUtterance(line.line);
-  utter.rate=podSpeed; utter.pitch=line.speaker.toLowerCase()==='alex'?0.95:1.1;
-  if(line.speaker.toLowerCase()==='alex'&&voiceAlex) utter.voice=voiceAlex;
-  if(line.speaker.toLowerCase()==='jordan'&&voiceJordan) utter.voice=voiceJordan;
-  utter.onend=()=>{ if(podPlaying){ podIdx=idx+1; speakLine(podIdx); } };
-  utter.onerror=()=>{ if(podPlaying){ podIdx=idx+1; speakLine(podIdx); } };
-  window.speechSynthesis.speak(utter);
-}
-function endPodcast(){
-  podPlaying=false; podIdx=0;
-  document.querySelectorAll('.pod-line').forEach(l=>l.classList.remove('active'));
-  document.getElementById('pod-play-btn').textContent='▶ Play again';
-  const st=document.getElementById('pod-status2'); st.className='pod-foot2'; document.getElementById('pod-status-text').textContent='Finished ✓';
-  document.getElementById('pod-prog').textContent='';
-}
-function renderExplain(raw,pane){
-  pane.innerHTML=`<div class="exp-box"><div class="exp-top"><span>Simplified explanation</span><button class="tool-btn" style="padding:6px 14px;font-size:12px" onclick="speakText(${JSON.stringify(raw)},this,'🔊 Read aloud','⏹ Stop')">🔊 Read aloud</button></div><div class="exp-body">${esc(raw)}</div></div>`;
-}
-
-// BILLING
-const PAYPAL_PLANS={ basic:{ price:'$7/mo', features:['30 generations/day','Flashcards','Podcast scripts','Text-to-speech'] }, pro:{ price:'$15/mo', features:['Unlimited generations','All 3 tools','Text-to-speech','Priority support'] } };
-function renderBilling(){
-  const u=currentUser(); if(!u) return;
-  const cur=u.plan||'free'; const grid=document.getElementById('billing-grid'); grid.innerHTML='';
-  Object.entries(PAYPAL_PLANS).forEach(([key,plan])=>{
-    const isCurrent=cur===key;
-    const div=document.createElement('div'); div.className='billing-plan'+(isCurrent?' current':'');
-    div.innerHTML=`${isCurrent?'<div class="current-label">Current plan</div>':''}<div class="bp-name">${key.toUpperCase()}</div><div class="bp-price">${plan.price}</div><ul class="bp-features">${plan.features.map(f=>`<li>${f}</li>`).join('')}</ul><div class="paypal-container" id="pp-${key}"></div>`;
-    grid.appendChild(div);
-    if(!isCurrent) mountPayPal(key, div.querySelector('.paypal-container'));
-    else div.querySelector('.paypal-container').innerHTML=`<button class="btn" style="width:100%;opacity:.5;cursor:default">Current plan</button>`;
-  });
-  const fdiv=document.createElement('div'); fdiv.className='billing-plan'+(cur==='free'?' current':'');
-  fdiv.innerHTML=`${cur==='free'?'<div class="current-label">Current plan</div>':''}<div class="bp-name">FREE</div><div class="bp-price">$0/mo</div><ul class="bp-features"><li>5 generations/day</li><li>Flashcards only</li><li>Text-to-speech</li></ul><div style="margin-top:1rem">${cur==='free'?'<button class="btn" style="width:100%;opacity:.5;cursor:default">Current plan</button>':'<button class="btn" style="width:100%" onclick="downgradeFree()">Downgrade to Free</button>'}</div>`;
-  grid.appendChild(fdiv);
-}
-function mountPayPal(planKey,container){
-  if(!window.paypal){ container.innerHTML='<p style="font-size:12px;color:var(--ink3)">PayPal loading…</p>'; return; }
-  const prices={basic:'7.00',pro:'15.00'};
-  paypal.Buttons({
-    style:{ layout:'vertical', color:'gold', shape:'pill', label:'subscribe', height:40 },
-    createOrder:(data,actions)=>actions.order.create({ purchase_units:[{ description:`StudyAI ${planKey.charAt(0).toUpperCase()+planKey.slice(1)} Plan`, amount:{ currency_code:'USD', value:prices[planKey] } }] }),
-    onApprove:(data,actions)=>actions.order.capture().then(details=>{ upgradePlan(planKey); toast(`You're now on ${planKey} plan 🎉`); renderBilling(); }),
-    onError:err=>toast('Payment failed. Try again.')
-  }).render(container);
-}
-function upgradePlan(plan){ const u=currentUser(); if(!u) return; u.plan=plan; saveUser(u); document.getElementById('nav-badge').textContent=PLANS[plan].label; document.getElementById('nav-badge').className='nav-plan-badge badge-'+plan; }
-function downgradeFree(){ if(!confirm('Downgrade to free?')) return; upgradePlan('free'); toast('Downgraded to Free.'); renderBilling(); }
-function startUpgrade(plan){ const u=currentUser(); if(!u){ showPage('signup'); return; } showPage('dashboard'); initDash(); showDash('billing'); }
-
-// ADMIN
-const OWNER = { name:'Owner', email:'owner@studyai.app', pass:'studyai-owner-2025', plan:'pro', joinedAt:0, usage:{}, isOwner:true };
-function seedOwner(){ const db=DB.users; if(!db[OWNER.email]){ db[OWNER.email]=OWNER; DB.users=db; } }
-function renderAdmin(){
-  const panel=document.getElementById('dash-admin'); if(!panel) return;
-  const db=DB.users; const users=Object.values(db).filter(u=>!u.isOwner);
-  const revenue={basic:7,pro:15,free:0}; const totalRev=users.reduce((s,u)=>s+(revenue[u.plan||'free']||0),0);
-  panel.innerHTML=`<h2>Admin panel</h2><p class="subtitle">Your business at a glance.</p>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:1.5rem">
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1rem"><div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px">Total users</div><div style="font-family:var(--ff-display);font-size:2rem;font-weight:900">${users.length}</div></div>
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1rem"><div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px">Monthly revenue</div><div style="font-family:var(--ff-display);font-size:2rem;font-weight:900;color:var(--gold)">$${totalRev}</div></div>
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1rem"><div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px">Paid users</div><div style="font-family:var(--ff-display);font-size:2rem;font-weight:900;color:var(--green)">${users.filter(u=>u.plan&&u.plan!=='free').length}</div></div>
-    </div>
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
-      <div style="padding:.75rem 1.25rem;border-bottom:1px solid var(--border);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2)">All users</div>
-      ${users.length===0?'<div class="empty">No users yet.</div>':'<table style="width:100%;border-collapse:collapse"><thead><tr style="background:var(--bg2)"><th style="text-align:left;padding:8px 14px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)">Name</th><th style="text-align:left;padding:8px 14px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)">Email</th><th style="text-align:left;padding:8px 14px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)">Plan</th><th style="text-align:left;padding:8px 14px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)">Actions</th></tr></thead><tbody>'+users.map(u=>`<tr style="border-top:1px solid var(--border)"><td style="padding:10px 14px;font-size:13px">${esc(u.name)}</td><td style="padding:10px 14px;font-size:12px;color:var(--ink2)">${esc(u.email)}</td><td style="padding:10px 14px"><span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;background:${u.plan==='pro'?'var(--goldbg)':u.plan==='basic'?'var(--bluebg)':'var(--bg2)'};color:${u.plan==='pro'?'var(--gold)':u.plan==='basic'?'var(--blue)':'var(--ink3)'}">${(u.plan||'free').toUpperCase()}</span></td><td style="padding:10px 14px"><button onclick="adminSetPlan('${u.email}','pro')" style="font-size:11px;padding:3px 8px;border-radius:99px;border:1px solid var(--border);background:transparent;cursor:pointer;font-family:var(--ff-body);margin-right:4px">Pro</button><button onclick="adminSetPlan('${u.email}','basic')" style="font-size:11px;padding:3px 8px;border-radius:99px;border:1px solid var(--border);background:transparent;cursor:pointer;font-family:var(--ff-body);margin-right:4px">Basic</button><button onclick="adminSetPlan('${u.email}','free')" style="font-size:11px;padding:3px 8px;border-radius:99px;border:1px solid var(--border);background:transparent;cursor:pointer;font-family:var(--ff-body)">Free</button></td></tr>`).join('')+'</tbody></table>'}
-    </div>`;
-}
-function adminSetPlan(email,plan){ const db=DB.users; if(!db[email]) return; db[email].plan=plan; DB.users=db; toast(db[email].name+' moved to '+plan+'.'); renderAdmin(); }
-
-// UTILS
-function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000); }
-
-// BOOT
-(function init(){
-  seedOwner();
-  const u=currentUser();
-  if(u){ showPage('dashboard'); initDash(); }
-  else { showPage('landing'); }
-})();
-</script>
+  <footer><div class="container footer-inner"><span>© 2026 StudyAI</span><span>Built for students, one study session at a time.</span></div></footer>
 </body>
 </html>
